@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="" method="post">
+{{ form.hidden_tag() }}
+{{ form.shoe.label }}  {{ form.shoe }}
+{% for error in form.shoe.errors %}
+[{{ error }}]
+{% endfor %}
+</form>
+
+
+<table>
+<tr>
+<td>Total miles</td><td>{{ form.total_mi }}</td>
+</tr>
+<tr>
+<td>Miles walked</td><td>{{ form.walk_mi }}</td>
+</tr>
+<tr>
+<td>Miles run</td><td>{{ form.run_mi }}</td>
+</tr>
+</table>
+
+{{ form.submit }}
+
+
+{% endblock %}
