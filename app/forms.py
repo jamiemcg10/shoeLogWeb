@@ -43,9 +43,9 @@ class ShoeCalcForm(FlaskForm):
 
     temp_shoes = Activity.query.distinct(Activity.shoe).group_by(Activity.shoe)
     shoes = []
-    i = 1
+    i = 0
     for shoe in temp_shoes:
-        shoes.append((i, shoe.shoe))
+        shoes.append((str(i), shoe.shoe))
         i+=1
     shoe = SelectField('Select shoe: ', choices=shoes)
     submit = SubmitField('Calculate')

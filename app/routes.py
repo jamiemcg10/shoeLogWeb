@@ -4,6 +4,7 @@ from app.forms import LoginForm, LogRunForm, RegistrationForm, ShoeCalcForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Activity
 from werkzeug.urls import url_parse
+from sqlalchemy import func
 
 
 @app.route('/')
@@ -75,14 +76,21 @@ def viewshoes():
     
     form = ShoeCalcForm()
     
-    total_mi = form.total_mi
-    walk_mi = form.walk_mi
-    run_mi = form.run_mi   
+    #total_mi = form.total_mi
+    #walk_mi = form.walk_mi
+    #run_mi = form.run_mi   
 
    
     if form.validate_on_submit():
-        matching_activities = Activity.query.filter(Activity.shoe == form.shoe.data)
-        
+        print(form.shoe.data)
+        #matching_activities = Activity.query(func.sum(Activity.total_miles)).filter(Activity.shoe == form.shoes[int(form.shoe.data)][1])
+        matching_activities = db.session.query(db.func.sum(Activity.total_miles), db.func.sum(Activity.walk_miles), db.func.sum(Activity.run_miles)).filter(Activity.shoe == form.shoes[int(form.shoe.data)][1])
+        print(matching_activities)
+        for act in matching_activities:
+            print(act[0])
         print("valid")
+        form.total_mi = act[0]
+        form.walk_mi = act[1]
+        form.run_mi = act[2]
 
-    return render_template('viewshoes.html', title='Shoes', form=form, total_mi=total_mi, walk_mi=walk_mi, run_mi=run_mi)
+    return render_template('viewshoes.html', title='Shoes', form=form)
